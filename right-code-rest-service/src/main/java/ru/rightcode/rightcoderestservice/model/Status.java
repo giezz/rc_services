@@ -15,6 +15,8 @@ public class Status {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    // Нужен ли???
     @Column
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private StatusEnum name;
 }

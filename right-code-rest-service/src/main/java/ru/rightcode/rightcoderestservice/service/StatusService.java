@@ -17,6 +17,10 @@ public class StatusService {
         return statusRepository.findAll();
     }
 
+    public Status get(Integer id) {
+        return statusRepository.getReferenceById(id);
+    }
+
     public void addStatus(Status status) {
         statusRepository.save(status);
     }
