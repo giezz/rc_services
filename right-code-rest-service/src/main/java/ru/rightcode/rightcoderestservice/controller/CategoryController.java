@@ -14,6 +14,7 @@ import java.util.List;
 public class CategoryController {
     private final CategoryRepository repository;
 
+    // ------------------------- GetMapping Category -----------------
     // Get all
     @GetMapping("/all")
     public List<Category> getAllCategories() {
@@ -26,10 +27,16 @@ public class CategoryController {
         return repository.findById(id).orElseThrow(() -> new CategoryNotFoundException(id));
     }
 
+    // ------------------------- PostMapping Category -----------------
     @PostMapping("/add")
     public Category addCategory(Category category) {
         return repository.save(category);
     }
 
-    // PutMapping
+    // ------------------------- PutMapping Category -----------------
+    // TODO: PutMapping
+
+
+    // ------------------------- DeleteMapping Category -----------------
+    // TODO: DeleteMapping
 }

@@ -14,6 +14,7 @@ import java.util.List;
 public class ResourceTypeController {
     private final ResourceTypeRepository repository;
 
+    // ------------------------- GetMapping ResourceType -----------------
     // Get all
     @GetMapping("/all")
     public List<ResourceType> getAllResourceTypes() {
@@ -26,11 +27,17 @@ public class ResourceTypeController {
         return repository.findById(id).orElseThrow(() -> new ResourceTypeNotFoundException(id));
     }
 
+    // ------------------------- PostMapping ResourceType -----------------
     // PostMapping
     @PostMapping("/add")
     public ResourceType addResourceType(ResourceType resourceType) {
         return repository.save(resourceType);
     }
 
-    // PutMapping
+    // ------------------------- PutMapping ResourceType -----------------
+    // TODO: PutMapping
+
+
+    // ------------------------- DeleteMapping ResourceType -----------------
+    // TODO: DeleteMapping
 }

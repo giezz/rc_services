@@ -14,6 +14,8 @@ import java.util.List;
 public class AuthorTypeController {
     private final AuthorTypeRepository repository;
 
+    // ------------------------- GetMapping AuthorType -----------------
+    // Get all
     @GetMapping("/all")
     public List<AuthorType> getAllAuthorTypes() {
         return repository.findAll();
@@ -25,12 +27,18 @@ public class AuthorTypeController {
         return repository.findById(id).orElseThrow(() -> new AuthorNotFoundException(id));
     }
 
+    // ------------------------- PostMapping AuthorType -----------------
     // PostMapping
     @PostMapping("/add")
     public AuthorType addAuthorType(AuthorType authorType) {
         return repository.save(authorType);
     }
 
-    // PutMapping
+    // ------------------------- PutMapping AuthorType -----------------
+    // TODO: PutMapping
+
+
+    // ------------------------- DeleteMapping AuthorType -----------------
+    // TODO: DeleteMapping
 
 }

@@ -14,6 +14,7 @@ import java.util.List;
 public class ExternalResourceController {
     private final ExternalResourceRepository repository;
 
+    // ------------------------- GetMapping ExternalResource -----------------
     // Get all
     @GetMapping("/all")
     public List<ExternalResource> getAllExternalResources() {
@@ -26,12 +27,15 @@ public class ExternalResourceController {
         return repository.findById(id).orElseThrow(() -> new ExternalResourceNotFoundException(id));
     }
 
+    // ------------------------- PostMapping ExternalResource -----------------
     // PostMapping
     @PostMapping("/add")
     public ExternalResource addExternalResource(ExternalResource externalResource) {
         return repository.save(externalResource);
     }
 
-    // PutMapping
+    // ------------------------- PutMapping ExternalResource -----------------
+    // TODO: PutMapping
 
+    // ------------------------- DeleteMapping ExternalResource -----------------
 }
