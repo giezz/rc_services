@@ -3,8 +3,7 @@ package ru.rightcode.rightcoderestservice.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.rightcode.rightcoderestservice.model.Tag;
-import ru.rightcode.rightcoderestservice.notfoundexception.TagNotFoundException;
-import ru.rightcode.rightcoderestservice.repository.TagRepository;
+import ru.rightcode.rightcoderestservice.service.TagService;
 
 import java.util.List;
 
@@ -12,34 +11,28 @@ import java.util.List;
 @RequestMapping("/tags")
 @RequiredArgsConstructor
 public class TagController {
-    private final TagRepository repository;
 
-    // ------------------------- GetMapping Tags -----------------
-    // Get all
-    @GetMapping("/all")
+    private final TagService tagService;
+
+    @GetMapping
     public List<Tag> getAllTags() {
-        return repository.findAll();
+        return tagService.getAll();
     }
 
-    // Get one by id
     @GetMapping("/{id}")
     public Tag getTagById(@PathVariable(name = "id") Integer id) {
-        return repository.findById(id).orElseThrow(() -> new TagNotFoundException(id));
+        return tagService.getById(id);
     }
 
-    // TODO: GetMapping by name
+    @GetMapping("/{name}")
+    public Tag getByName(@PathVariable(name = "name") String name) {
+        return tagService.getByName(name);
+    }
 
-    // ------------------------- PostMapping Tags -----------------
-    // Post add one
-    @PostMapping("/add")
+    @PostMapping()
     public void addTag(Tag tag) {
-        repository.save(tag);
+        tagService.save(tag);
     }
 
-    // ------------------------- PutMapping Tags -----------------
-    // TODO: PutMapping
-
-
-    // ------------------------- DeleteMapping Tags -----------------
-    // TODO: DeleteMapping
+    // TODO: PutMapping DeleteMapping
 }

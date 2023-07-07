@@ -21,8 +21,8 @@ public class StatusController {
     }
 
     @GetMapping("{id}")
-    public Status get(@PathVariable(name = "id") Integer id){
-        return statusService.get(id);
+    public Status get(@PathVariable("id") Integer id){
+        return statusService.getById(id);
     }
 
     @PostMapping("add")

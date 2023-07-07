@@ -1,52 +1,64 @@
 package ru.rightcode.rightcoderestservice.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.IanaLinkRelations;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.rightcode.rightcoderestservice.dto.ArticleResponse;
 import ru.rightcode.rightcoderestservice.model.Article;
-import ru.rightcode.rightcoderestservice.notfoundexception.ArticleNotFoundException;
-import ru.rightcode.rightcoderestservice.repository.ArticleRepository;
+import ru.rightcode.rightcoderestservice.service.ArticleService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/article")
+@RequestMapping("/articles")
 @RequiredArgsConstructor
 public class ArticleController {
-    private final ArticleRepository repository;
 
-    // ------------------------- GetMapping Article -----------------
-    // Get all
-    // TODO: Sort by status='Опубликован', is_main, public_date
-    @GetMapping("/all")
-    public List<Article> getAllArticles() {
-        return repository.findAll();
+    private final ArticleService articleService;
+
+    @GetMapping
+    public List<ArticleResponse> getAllArticles(@RequestParam(name = "sort", required = false) String sort,
+                                                @RequestParam(name = "tags", required = false) List<String> tags) {
+        // FIXME сделать по человеческий
+        if (sort != null) {
+            if (sort.equals("by-status"))
+                return articleService.getArticleSortedByStatus();
+            if (sort.equals("by-date"))
+                return articleService.getArticleSortedByPublicationDate();
+            if (sort.equals("by-main"))
+                return articleService.getArticleSortedIsMainArticle();
+        } else if (tags != null) {
+            return articleService.getArticlesByTags(tags);
+        }
+        return articleService.getAll();
     }
 
-    // Get one by id
+    // TODO: обработать EntityNotFoundException
     @GetMapping("/{id}")
-    public Article getArticleById(@PathVariable Integer id) {
-        return repository.findById(id).orElseThrow(() -> new ArticleNotFoundException(id));
+    public ArticleResponse getArticleById(@PathVariable Integer id) {
+        return articleService.getById(id);
     }
 
+    // нужен ли?
     // TODO: Get all by header
 
-    // TODO: Get all by tag
-
-
-    // ------------------------- PostMapping Article -----------------
-    @PostMapping("/add")
-    public Article addArticle(Article article) {
-        return repository.save(article);
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addArticle(@RequestBody Article article) {
+        articleService.addArticle(article);
     }
 
-    // ------------------------- PutMapping Article -----------------
-    // TODO: PutMapping
+    @PutMapping("/{id}")
+    public void updateArticle(@PathVariable("id") Article articleFromDb,
+                              @RequestBody Article article) {
+        BeanUtils.copyProperties(article, articleFromDb, "id");
+        articleService.updateArticle(articleFromDb);
+    }
 
-
-    // ------------------------- DeleteMapping Article -----------------
-    // TODO: DeleteMapping
+    @DeleteMapping("/{id}")
+    public void deleteArticle(@PathVariable("id") Article article) {
+        articleService.deleteArticle(article);
+    }
 
 }

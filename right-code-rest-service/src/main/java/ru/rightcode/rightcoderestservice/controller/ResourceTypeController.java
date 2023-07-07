@@ -9,7 +9,7 @@ import ru.rightcode.rightcoderestservice.repository.ResourceTypeRepository;
 import java.util.List;
 
 @RestController
-@RequestMapping("/resourceType")
+@RequestMapping("/resource-type")
 @RequiredArgsConstructor
 public class ResourceTypeController {
     private final ResourceTypeRepository repository;
@@ -23,7 +23,7 @@ public class ResourceTypeController {
 
     // Get one by id
     @GetMapping("/{id}")
-    public ResourceType getResourceTypeById(@PathVariable(name="id") Integer id){
+    public ResourceType getResourceTypeById(@PathVariable("id") Integer id){
         return repository.findById(id).orElseThrow(() -> new ResourceTypeNotFoundException(id));
     }
 
