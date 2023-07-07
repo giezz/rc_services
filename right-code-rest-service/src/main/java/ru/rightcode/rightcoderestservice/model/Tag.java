@@ -1,5 +1,6 @@
 package ru.rightcode.rightcoderestservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,13 +13,17 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 public class Tag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @Column
     private String name;
-    @ManyToMany(mappedBy = "tags")
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "tags", fetch = FetchType.EAGER)
     private Set<Article> articles;
 }

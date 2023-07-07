@@ -17,6 +17,5 @@ public class Status {
     private Integer id;
     // Нужен ли???
     @Column
-    @Enumerated(EnumType.STRING)
-    private StatusEnum name;
+    private String name;
 }
