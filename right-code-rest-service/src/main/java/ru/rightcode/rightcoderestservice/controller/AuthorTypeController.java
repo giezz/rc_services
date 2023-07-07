@@ -1,17 +1,15 @@
 package ru.rightcode.rightcoderestservice.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.rightcode.rightcoderestservice.model.AuthorType;
 import ru.rightcode.rightcoderestservice.notfoundexception.AuthorNotFoundException;
 import ru.rightcode.rightcoderestservice.repository.AuthorTypeRepository;
 
 import java.util.List;
 
-@RestController("/authorType")
+@RestController
+@RequestMapping("/author-type")
 @RequiredArgsConstructor
 public class AuthorTypeController {
     private final AuthorTypeRepository repository;

@@ -8,7 +8,8 @@ import ru.rightcode.rightcoderestservice.repository.AuthorArticleRepository;
 
 import java.util.List;
 
-@RestController("/author-article")
+@RestController
+@RequestMapping("/author-article")
 @RequiredArgsConstructor
 public class AuthorArticleController {
     private final AuthorArticleRepository repository;

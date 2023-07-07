@@ -1,17 +1,15 @@
 package ru.rightcode.rightcoderestservice.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.rightcode.rightcoderestservice.model.ResourceType;
 import ru.rightcode.rightcoderestservice.notfoundexception.ResourceTypeNotFoundException;
 import ru.rightcode.rightcoderestservice.repository.ResourceTypeRepository;
 
 import java.util.List;
 
-@RestController("/resourceType")
+@RestController
+@RequestMapping("/resourceType")
 @RequiredArgsConstructor
 public class ResourceTypeController {
     private final ResourceTypeRepository repository;

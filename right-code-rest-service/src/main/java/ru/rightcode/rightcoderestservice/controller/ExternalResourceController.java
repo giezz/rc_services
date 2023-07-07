@@ -1,17 +1,15 @@
 package ru.rightcode.rightcoderestservice.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.rightcode.rightcoderestservice.model.ExternalResource;
 import ru.rightcode.rightcoderestservice.notfoundexception.ExternalResourceNotFoundException;
 import ru.rightcode.rightcoderestservice.repository.ExternalResourceRepository;
 
 import java.util.List;
 
-@RestController("/external-resource")
+@RestController
+@RequestMapping("/external-resource")
 @RequiredArgsConstructor
 public class ExternalResourceController {
     private final ExternalResourceRepository repository;

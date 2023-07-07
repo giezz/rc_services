@@ -1,17 +1,15 @@
 package ru.rightcode.rightcoderestservice.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.rightcode.rightcoderestservice.model.Category;
 import ru.rightcode.rightcoderestservice.notfoundexception.CategoryNotFoundException;
 import ru.rightcode.rightcoderestservice.repository.CategoryRepository;
 
 import java.util.List;
 
-@RestController("/category")
+@RestController
+@RequestMapping("/category")
 @RequiredArgsConstructor
 public class CategoryController {
     private final CategoryRepository repository;
