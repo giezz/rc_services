@@ -17,13 +17,14 @@ public class TagService {
         return tagRepository.findAll();
     }
 
-    public Tag get(Integer id) {
+    public Tag getById(Integer id) {
         return tagRepository.getReferenceById(id);
     }
 
     public Tag getByName(String name) {
         return tagRepository.findTagByNameIgnoreCase(name);
     }
+
     public Tag save(Tag tag) {
         return tagRepository.save(tag);
     }

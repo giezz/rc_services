@@ -6,8 +6,6 @@ import ru.rightcode.rightcoderestservice.model.Tag;
 
 @Repository
 public interface TagRepository extends JpaRepository<Tag, Integer> {
-    // get all tags by article id
-    // List<Tag> findAllByArticleId(Long id);
-
+    Tag findTagByNameIgnoreCase(String name);
 
 }
