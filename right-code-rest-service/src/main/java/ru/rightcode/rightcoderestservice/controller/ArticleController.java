@@ -1,12 +1,10 @@
 package ru.rightcode.rightcoderestservice.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.rightcode.rightcoderestservice.assembler.ArticleModelAssembler;
 import ru.rightcode.rightcoderestservice.model.Article;
 import ru.rightcode.rightcoderestservice.notfoundexception.ArticleNotFoundException;
 import ru.rightcode.rightcoderestservice.repository.ArticleRepository;
@@ -14,63 +12,41 @@ import ru.rightcode.rightcoderestservice.repository.ArticleRepository;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/article")
+@RequestMapping("/article")
 @RequiredArgsConstructor
 public class ArticleController {
     private final ArticleRepository repository;
-    private final ArticleModelAssembler assembler;
 
-    @GetMapping("/getall")
-    CollectionModel<EntityModel<Article>> all() {
-        // EntityModel.of(employee,
-        //          linkTo(methodOn(EmployeeController.class).one(employee.getId())).withSelfRel(),
-        //          linkTo(methodOn(EmployeeController.class).all()).withRel("employees")))
-        List<EntityModel<Article>> articles = repository.findAll().stream()
-                .map(assembler::toModel)
-                .collect(java.util.stream.Collectors.toList());
-        return CollectionModel.of(articles);
+    // ------------------------- GetMapping Article -----------------
+    // Get all
+    // TODO: Sort by status='Опубликован', is_main, public_date
+    @GetMapping("/all")
+    public List<Article> getAllArticles() {
+        return repository.findAll();
     }
 
+    // Get one by id
     @GetMapping("/{id}")
-    EntityModel<Article> one(@PathVariable Integer id) {
-        Article article = repository.findById(id)
-                .orElseThrow(() -> new ArticleNotFoundException(id));
-        return assembler.toModel(article);
+    public Article getArticleById(@PathVariable Integer id) {
+        return repository.findById(id).orElseThrow(() -> new ArticleNotFoundException(id));
     }
 
+    // TODO: Get all by header
+
+    // TODO: Get all by tag
+
+
+    // ------------------------- PostMapping Article -----------------
     @PostMapping("/add")
-    ResponseEntity<?> newArticle(@RequestBody Article newArticle) {
-        EntityModel<Article> entityModel = assembler.toModel(repository.save(newArticle));
-        return ResponseEntity
-                .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
-                .body(entityModel);
+    public Article addArticle(Article article) {
+        return repository.save(article);
     }
 
-    @PutMapping("/update/{id}")
-    ResponseEntity<?> replaceArticle(@RequestBody Article newArticle, @PathVariable Integer id) {
-        // TODO: add author, tags, resources ...
-        Article updatedArticle = repository.findById(id)
-                .map(article -> {
-                    article.setHeader(newArticle.getHeader());
-                    article.setContent(newArticle.getContent());
-                    article.setPublicationDate(newArticle.getPublicationEndDate());
-                    article.setIsMainArticle(newArticle.getIsMainArticle());
-                    article.setIsPubliclyAccessible(newArticle.getIsPubliclyAccessible());
-                    return repository.save(article);
-                })
-                .orElseGet(() -> {
-                    newArticle.setId(id);
-                    return repository.save(newArticle);
-                });
-        EntityModel<Article> entityModel = assembler.toModel(updatedArticle);
-        return ResponseEntity
-                .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
-                .body(entityModel);
-    }
+    // ------------------------- PutMapping Article -----------------
+    // TODO: PutMapping
 
-    @DeleteMapping("/delete/{id}")
-    ResponseEntity<?> deleteArticle(@PathVariable Integer id) {
-        repository.deleteById(id);
-        return ResponseEntity.noContent().build();
-    }
+
+    // ------------------------- DeleteMapping Article -----------------
+    // TODO: DeleteMapping
+
 }

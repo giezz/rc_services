@@ -10,15 +10,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class StatusService {
-
     private final StatusRepository statusRepository;
 
     public List<Status> getAllStatuses() {
         return statusRepository.findAll();
-    }
-
-    public Status get(Integer id) {
-        return statusRepository.getReferenceById(id);
     }
 
     public void addStatus(Status status) {
