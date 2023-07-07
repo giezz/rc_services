@@ -14,7 +14,7 @@ import ru.rightcode.rightcoderestservice.repository.ArticleRepository;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/article")
+@RequestMapping("/article")
 @RequiredArgsConstructor
 public class ArticleController {
     private final ArticleRepository repository;
