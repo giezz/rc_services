@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/tags")
+@io.swagger.v3.oas.annotations.tags.Tag(name = "Tag Controller", description = "Контроллер тэгов")
 @RequiredArgsConstructor
 public class TagController {
 
@@ -23,6 +24,11 @@ public class TagController {
         return tagService.getAll();
     }
 
+    @GetMapping
+    public List<Tag> getefef() {
+        return null;
+    }
+
     @GetMapping("/{id}")
     public Tag getTagById(@PathVariable("id") Integer id) {
         return tagService.getById(id);
@@ -31,18 +37,22 @@ public class TagController {
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public void addTag(@RequestBody Tag tag) {
-//        tag.setArticles(null);
         tagService.add(tag);
     }
 
+    //    @PutMapping
+//    public void updateTag(@RequestBody Tag tag) {
+//        if (tag.getId() != null)
+//            tagService.update(tag);
+//    }
     @PutMapping("/{id}")
     public void updateTag(@PathVariable("id") Tag tagFromDb,
-                       @RequestBody Tag tag) {
+                          @RequestBody Tag tag) {
         tagFromDb.setName(tag.getName());
         tagService.update(tagFromDb);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public void deleteTag(@PathVariable("id") Tag tag) {
         tagService.delete(tag);
     }

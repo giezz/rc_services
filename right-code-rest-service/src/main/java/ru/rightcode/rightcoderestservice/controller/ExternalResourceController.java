@@ -1,41 +1,48 @@
 package ru.rightcode.rightcoderestservice.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.rightcode.rightcoderestservice.model.ExternalResource;
-import ru.rightcode.rightcoderestservice.notfoundexception.ExternalResourceNotFoundException;
-import ru.rightcode.rightcoderestservice.repository.ExternalResourceRepository;
+import ru.rightcode.rightcoderestservice.service.ExternalResourceService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/external-resource")
+@RequestMapping("/external-resources")
+@Tag(name = "External Resource Controller", description = "Контроллер типов внешних ресурсов")
 @RequiredArgsConstructor
 public class ExternalResourceController {
-    private final ExternalResourceRepository repository;
 
-    // ------------------------- GetMapping ExternalResource -----------------
-    // Get all
-    @GetMapping("/all")
+    private final ExternalResourceService externalResourceService;
+
+    @GetMapping
     public List<ExternalResource> getAllExternalResources() {
-        return repository.findAll();
+        return externalResourceService.getAll();
     }
 
-    // Get one by id
     @GetMapping("/{id}")
-    public ExternalResource getExternalResourceById(@PathVariable(name="id") Integer id){
-        return repository.findById(id).orElseThrow(() -> new ExternalResourceNotFoundException(id));
+    public ExternalResource getExternalResourceById(@PathVariable(name = "id") Integer id) {
+        return externalResourceService.get(id);
     }
 
-    // ------------------------- PostMapping ExternalResource -----------------
-    // PostMapping
-    @PostMapping("/add")
-    public ExternalResource addExternalResource(ExternalResource externalResource) {
-        return repository.save(externalResource);
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addExternalResource(@RequestBody ExternalResource externalResource) {
+        externalResourceService.add(externalResource);
     }
 
-    // ------------------------- PutMapping ExternalResource -----------------
-    // TODO: PutMapping
+    @PutMapping("/{id}")
+    public void updateExternalResource(@PathVariable("id") ExternalResource externalResourceFromDb,
+                                       @RequestBody ExternalResource externalResource) {
+        BeanUtils.copyProperties(externalResource, externalResourceFromDb, "id");
+        externalResourceService.update(externalResourceFromDb);
+    }
 
-    // ------------------------- DeleteMapping ExternalResource -----------------
+    @DeleteMapping("/{id}")
+    public void deleteExternalResource(@PathVariable("id") ExternalResource externalResource) {
+        externalResourceService.delete(externalResource);
+    }
 }

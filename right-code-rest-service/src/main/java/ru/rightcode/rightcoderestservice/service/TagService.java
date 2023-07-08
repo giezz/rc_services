@@ -3,7 +3,7 @@ package ru.rightcode.rightcoderestservice.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.rightcode.rightcoderestservice.model.Tag;
-import ru.rightcode.rightcoderestservice.notfoundexception.TagNotFoundException;
+import ru.rightcode.rightcoderestservice.exception.notfound.TagNotFoundException;
 import ru.rightcode.rightcoderestservice.repository.TagRepository;
 
 import java.util.List;

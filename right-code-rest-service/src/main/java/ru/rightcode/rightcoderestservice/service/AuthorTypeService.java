@@ -3,6 +3,7 @@ package ru.rightcode.rightcoderestservice.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.rightcode.rightcoderestservice.model.AuthorType;
+import ru.rightcode.rightcoderestservice.exception.notfound.AuthorTypeNotFoundException;
 import ru.rightcode.rightcoderestservice.repository.AuthorTypeRepository;
 
 import java.util.List;
@@ -10,13 +11,26 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class AuthorTypeService {
+
     private final AuthorTypeRepository authorTypeRepository;
 
-    public List<AuthorType> getAllAuthorTypes() {
+    public List<AuthorType> getAll() {
         return authorTypeRepository.findAll();
     }
 
-    public void addAuthorType(AuthorType authorType) {
+    public AuthorType getById(Integer id) {
+        return authorTypeRepository.findById(id).orElseThrow(() -> new AuthorTypeNotFoundException(id));
+    }
+
+    public void add(AuthorType authorType) {
         authorTypeRepository.save(authorType);
+    }
+
+    public void update(AuthorType authorType) {
+        authorTypeRepository.save(authorType);
+    }
+
+    public void delete(AuthorType authorType) {
+        authorTypeRepository.delete(authorType);
     }
 }

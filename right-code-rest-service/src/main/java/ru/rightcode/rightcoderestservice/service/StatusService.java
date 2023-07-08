@@ -13,7 +13,7 @@ public class StatusService {
 
     private final StatusRepository statusRepository;
 
-    public List<Status> getAllStatuses() {
+    public List<Status> getAll() {
         return statusRepository.findAll();
     }
 
@@ -21,7 +21,15 @@ public class StatusService {
         return statusRepository.findById(id).orElseThrow();
     }
 
-    public void addStatus(Status status) {
+    public void add(Status status) {
         statusRepository.save(status);
+    }
+
+    public void update(Status status) {
+        statusRepository.save(status);
+    }
+
+    public void delete(Status status) {
+        statusRepository.delete(status);
     }
 }

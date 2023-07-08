@@ -1,44 +1,49 @@
 package ru.rightcode.rightcoderestservice.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.rightcode.rightcoderestservice.model.AuthorType;
-import ru.rightcode.rightcoderestservice.notfoundexception.AuthorNotFoundException;
-import ru.rightcode.rightcoderestservice.repository.AuthorTypeRepository;
+import ru.rightcode.rightcoderestservice.service.AuthorTypeService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/author-type")
+@RequestMapping("/author-types")
+@Tag(name = "AuthorType Controller", description = "Контроллер типов авторов")
 @RequiredArgsConstructor
 public class AuthorTypeController {
-    private final AuthorTypeRepository repository;
 
-    // ------------------------- GetMapping AuthorType -----------------
-    // Get all
-    @GetMapping("/all")
+    private final AuthorTypeService authorTypeService;
+
+    @GetMapping
     public List<AuthorType> getAllAuthorTypes() {
-        return repository.findAll();
+        return authorTypeService.getAll();
     }
 
-    // Get one by id
     @GetMapping("/{id}")
-    public AuthorType getAuthorTypeById(@PathVariable(name = "id") Integer id){
-        return repository.findById(id).orElseThrow(() -> new AuthorNotFoundException(id));
+    public AuthorType getAuthorTypeById(@PathVariable(name = "id") Integer id) {
+        return authorTypeService.getById(id);
     }
 
-    // ------------------------- PostMapping AuthorType -----------------
-    // PostMapping
-    @PostMapping("/add")
-    public AuthorType addAuthorType(AuthorType authorType) {
-        return repository.save(authorType);
+    @PostMapping
+    public void addAuthorType(@RequestBody AuthorType authorType) {
+        authorTypeService.add(authorType);
     }
 
-    // ------------------------- PutMapping AuthorType -----------------
-    // TODO: PutMapping
+    //    @PutMapping
+//    public void updateAuthorType(@RequestBody AuthorType authorType) {
+//        authorTypeService.update(authorType);
+//    }
+    @PutMapping("/{id}")
+    public void updateAuthorType(@PathVariable("id") AuthorType authorTypeFromDb,
+                                 @RequestBody AuthorType authorType) {
+        authorTypeFromDb.setType(authorType.getType());
+        authorTypeService.update(authorTypeFromDb);
+    }
 
-
-    // ------------------------- DeleteMapping AuthorType -----------------
-    // TODO: DeleteMapping
-
+    @DeleteMapping("/{id}")
+    public void deleteAuthorType(@PathVariable("id") AuthorType authorType) {
+        authorTypeService.delete(authorType);
+    }
 }

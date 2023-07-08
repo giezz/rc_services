@@ -3,7 +3,7 @@ package ru.rightcode.rightcoderestservice.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.rightcode.rightcoderestservice.model.AuthorArticle;
-import ru.rightcode.rightcoderestservice.notfoundexception.AuthorArticleNotFoundException;
+import ru.rightcode.rightcoderestservice.exception.notfound.AuthorArticleNotFoundException;
 import ru.rightcode.rightcoderestservice.repository.AuthorArticleRepository;
 
 import java.util.List;

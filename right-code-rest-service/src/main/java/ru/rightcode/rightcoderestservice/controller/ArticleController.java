@@ -1,5 +1,6 @@
 package ru.rightcode.rightcoderestservice.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/articles")
+@Tag(name = "Article Controller", description = "Контроллер статей")
 @RequiredArgsConstructor
 public class ArticleController {
 
@@ -21,7 +23,7 @@ public class ArticleController {
     public List<ArticleResponse> getAllArticles(@RequestParam(name = "sort", required = false) String sort,
                                                 @RequestParam(name = "tags", required = false) List<String> tags,
                                                 @RequestParam(name = "header", required = false) String header) {
-        // FIXME сделать по человеческий
+        // FIXME: сделать по человеческий
         if (sort != null) {
             if (sort.equals("by-status"))
                 return articleService.getSortedByStatus();

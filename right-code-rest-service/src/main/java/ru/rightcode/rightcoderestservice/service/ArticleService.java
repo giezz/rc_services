@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.rightcode.rightcoderestservice.dto.ArticleResponse;
 import ru.rightcode.rightcoderestservice.model.Article;
-import ru.rightcode.rightcoderestservice.notfoundexception.ArticleNotFoundException;
+import ru.rightcode.rightcoderestservice.exception.notfound.ArticleNotFoundException;
 import ru.rightcode.rightcoderestservice.repository.ArticleRepository;
 
 import java.util.List;
