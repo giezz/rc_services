@@ -1,20 +1,19 @@
-package ru.rightcode.rightcoderestservice.controlleradvice;
+package ru.rightcode.rightcoderestservice.controlleradvice.notfound;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import ru.rightcode.rightcoderestservice.notfoundexception.AuthorArticleNotFoundException;
-import ru.rightcode.rightcoderestservice.notfoundexception.AuthorTypeNotFoundException;
+import ru.rightcode.rightcoderestservice.exception.notfound.ExternalResourceNotFoundException;
 
 @ControllerAdvice
-public class AuthorArticleNotFoundAdvice {
+public class ExternalResourceNotFoundAdvice {
 
     @ResponseBody
-    @ExceptionHandler(AuthorTypeNotFoundException.class)
+    @ExceptionHandler(ExternalResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String authorArticleNotFoundHandler(AuthorArticleNotFoundException ex){
+    public String externalResourceNotFoundHandler(Exception ex) {
         return ex.getMessage();
     }
 }

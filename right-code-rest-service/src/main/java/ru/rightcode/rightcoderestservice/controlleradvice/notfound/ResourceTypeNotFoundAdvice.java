@@ -1,19 +1,19 @@
-package ru.rightcode.rightcoderestservice.controlleradvice;
+package ru.rightcode.rightcoderestservice.controlleradvice.notfound;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import ru.rightcode.rightcoderestservice.notfoundexception.TagNotFoundException;
+import ru.rightcode.rightcoderestservice.exception.notfound.ResourceTypeNotFoundException;
 
 @ControllerAdvice
-public class TagNotFoundAdvice {
+public class ResourceTypeNotFoundAdvice {
 
     @ResponseBody
-    @ExceptionHandler(TagNotFoundException.class)
+    @ExceptionHandler(ResourceTypeNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String tagNotFoundHandler(TagNotFoundException ex) {
+    String resourceTypeNotFoundHandler(ResourceTypeNotFoundException ex) {
         return ex.getMessage();
     }
 }

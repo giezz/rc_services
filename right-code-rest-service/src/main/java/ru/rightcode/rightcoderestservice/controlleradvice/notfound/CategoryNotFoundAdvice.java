@@ -1,19 +1,20 @@
-package ru.rightcode.rightcoderestservice.controlleradvice;
+package ru.rightcode.rightcoderestservice.controlleradvice.notfound;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import ru.rightcode.rightcoderestservice.notfoundexception.ExternalResourceNotFoundException;
+import ru.rightcode.rightcoderestservice.exception.notfound.CategoryNotFoundException;
 
 @ControllerAdvice
-public class ExternalResourceNotFoundAdvice {
+public class CategoryNotFoundAdvice {
 
     @ResponseBody
-    @ExceptionHandler(ExternalResourceNotFoundException.class)
+    @ExceptionHandler(CategoryNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String externalResourceNotFoundHandler(Exception ex) {
+    String categoryNotFoundHandler(CategoryNotFoundException ex) {
         return ex.getMessage();
     }
+
 }

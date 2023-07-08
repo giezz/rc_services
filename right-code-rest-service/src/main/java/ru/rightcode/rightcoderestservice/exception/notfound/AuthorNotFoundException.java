@@ -1,4 +1,4 @@
-package ru.rightcode.rightcoderestservice.notfoundexception;
+package ru.rightcode.rightcoderestservice.exception.notfound;
 
 public class AuthorNotFoundException extends RuntimeException{
     public AuthorNotFoundException(Integer id) {

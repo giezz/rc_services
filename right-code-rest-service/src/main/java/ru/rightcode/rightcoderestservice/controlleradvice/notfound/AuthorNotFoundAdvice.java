@@ -1,19 +1,19 @@
-package ru.rightcode.rightcoderestservice.controlleradvice;
+package ru.rightcode.rightcoderestservice.controlleradvice.notfound;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import ru.rightcode.rightcoderestservice.notfoundexception.ArticleNotFoundException;
+import ru.rightcode.rightcoderestservice.exception.notfound.AuthorNotFoundException;
 
 @ControllerAdvice
-public class ArticleNotFoundAdvice {
+public class AuthorNotFoundAdvice {
 
     @ResponseBody
-    @ExceptionHandler(ArticleNotFoundException.class)
+    @ExceptionHandler(AuthorNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String articleNotFoundHandler(ArticleNotFoundException ex) {
+    String authorNotFoundHandler(AuthorNotFoundException ex) {
         return ex.getMessage();
     }
 }
