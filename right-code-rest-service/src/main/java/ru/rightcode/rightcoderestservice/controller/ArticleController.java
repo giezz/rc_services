@@ -19,46 +19,46 @@ public class ArticleController {
 
     @GetMapping
     public List<ArticleResponse> getAllArticles(@RequestParam(name = "sort", required = false) String sort,
-                                                @RequestParam(name = "tags", required = false) List<String> tags) {
+                                                @RequestParam(name = "tags", required = false) List<String> tags,
+                                                @RequestParam(name = "header", required = false) String header) {
         // FIXME сделать по человеческий
         if (sort != null) {
             if (sort.equals("by-status"))
-                return articleService.getArticleSortedByStatus();
+                return articleService.getSortedByStatus();
             if (sort.equals("by-date"))
-                return articleService.getArticleSortedByPublicationDate();
+                return articleService.getByPublicationDate();
             if (sort.equals("by-main"))
-                return articleService.getArticleSortedIsMainArticle();
+                return articleService.getSortedIsMainArticle();
         } else if (tags != null) {
-            return articleService.getArticlesByTags(tags);
+            return articleService.getByTags(tags);
+        } else if (header != null) {
+            return articleService.getByHeader(header);
         }
         return articleService.getAll();
     }
 
-    // TODO: обработать EntityNotFoundException
     @GetMapping("/{id}")
     public ArticleResponse getArticleById(@PathVariable Integer id) {
         return articleService.getById(id);
     }
 
-    // нужен ли?
-    // TODO: Get all by header
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void addArticle(@RequestBody Article article) {
-        articleService.addArticle(article);
+        articleService.add(article);
     }
 
     @PutMapping("/{id}")
     public void updateArticle(@PathVariable("id") Article articleFromDb,
                               @RequestBody Article article) {
+        // FIXME: При обновлении Article, Hibernate почему то удаляет записи из связующих таблиц в отношениях @ManyToMany
         BeanUtils.copyProperties(article, articleFromDb, "id");
-        articleService.updateArticle(articleFromDb);
+        articleService.update(articleFromDb);
     }
 
     @DeleteMapping("/{id}")
     public void deleteArticle(@PathVariable("id") Article article) {
-        articleService.deleteArticle(article);
+        articleService.delete(article);
     }
 
 }

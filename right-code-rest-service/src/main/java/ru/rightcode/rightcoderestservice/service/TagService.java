@@ -3,6 +3,7 @@ package ru.rightcode.rightcoderestservice.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.rightcode.rightcoderestservice.model.Tag;
+import ru.rightcode.rightcoderestservice.notfoundexception.TagNotFoundException;
 import ru.rightcode.rightcoderestservice.repository.TagRepository;
 
 import java.util.List;
@@ -18,22 +19,22 @@ public class TagService {
     }
 
     public Tag getById(Integer id) {
-        return tagRepository.getReferenceById(id);
+        return tagRepository.findById(id).orElseThrow(() -> new TagNotFoundException(id));
     }
 
-    public Tag getByName(String name) {
-        return tagRepository.findTagByNameIgnoreCase(name);
+    public List<Tag> getAllByName(String name) {
+        return tagRepository.findAllByNameIgnoreCaseLike(name);
     }
 
-    public Tag save(Tag tag) {
+    public Tag add(Tag tag) {
         return tagRepository.save(tag);
     }
 
-    public void delete(Integer id) {
-        tagRepository.deleteById(id);
+    public void delete(Tag tag) {
+        tagRepository.delete(tag);
     }
 
-    public Tag updateTag(Integer id, Tag tag) {
-        return null;
+    public void update(Tag tag) {
+        tagRepository.save(tag);
     }
 }

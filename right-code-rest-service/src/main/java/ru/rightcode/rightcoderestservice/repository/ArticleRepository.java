@@ -16,16 +16,23 @@ public interface ArticleRepository extends JpaRepository<Article, Integer> {
     @EntityGraph(attributePaths = {"status", "category", "delete", "editor", "tags", "externalResources", "externalResources.resourceType"})
     List<Article> findAll();
 
+    @EntityGraph(attributePaths = {"status", "category", "delete", "editor", "tags", "externalResources", "externalResources.resourceType"})
     @Query("select a from Article a order by a.status.name")
     List<Article> findAllOrderByStatus();
 
+    @EntityGraph(attributePaths = {"status", "category", "delete", "editor", "tags", "externalResources", "externalResources.resourceType"})
     @Query("select a from Article a order by a.publicationDate")
     List<Article> findAllOrderByPublicationDate();
 
+    @EntityGraph(attributePaths = {"status", "category", "delete", "editor", "tags", "externalResources", "externalResources.resourceType"})
     @Query("select a from Article a order by a.isMainArticle")
     List<Article> findAllOrderByIsMainArticle();
 
     @EntityGraph(attributePaths = {"status", "category", "delete", "editor", "tags", "externalResources", "externalResources.resourceType"})
     @Query(value = "select a from Article a join a.tags t where t.name in (:tags) ")
     List<Article> findArticlesByTag(@Param("tags") List<String> tags);
+
+    @EntityGraph(attributePaths = {"status", "category", "delete", "editor", "tags", "externalResources", "externalResources.resourceType"})
+    @Query(value = "select a from Article a where a.header like :header%")
+    List<Article> findArticleByHeader(@Param("header") String header);
 }

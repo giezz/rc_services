@@ -1,6 +1,5 @@
 package ru.rightcode.rightcoderestservice.service;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.rightcode.rightcoderestservice.dto.ArticleResponse;
@@ -20,47 +19,50 @@ public class ArticleService {
         return mapToArticleResponse(articleRepository.findById(id).orElseThrow(() -> new ArticleNotFoundException(id)));
     }
 
-    @Transactional
     public List<ArticleResponse> getAll() {
         List<Article> articles = articleRepository.findAll();
         return articles.stream().map(this::mapToArticleResponse).toList();
 //        return articleRepository.findAll();
     }
 
-    public List<ArticleResponse> getArticleSortedByStatus() {
+    public List<ArticleResponse> getSortedByStatus() {
         List<Article> articles = articleRepository.findAllOrderByStatus();
         return articles.stream().map(this::mapToArticleResponse).toList();
     }
 
-    public List<ArticleResponse> getArticleSortedByPublicationDate() {
+    public List<ArticleResponse> getByPublicationDate() {
         List<Article> articles = articleRepository.findAllOrderByPublicationDate();
         return articles.stream().map(this::mapToArticleResponse).toList();
     }
 
-    public List<ArticleResponse> getArticleSortedIsMainArticle() {
+    public List<ArticleResponse> getSortedIsMainArticle() {
         List<Article> articles = articleRepository.findAllOrderByIsMainArticle();
         return articles.stream().map(this::mapToArticleResponse).toList();
     }
 
-    public List<ArticleResponse> getArticlesByTags(List<String> tags) {
+    public List<ArticleResponse> getByTags(List<String> tags) {
         List<Article> articles = articleRepository.findArticlesByTag(tags);
         return articles.stream().map(this::mapToArticleResponse).toList();
     }
 
-    public void addArticle(Article article) {
+    public List<ArticleResponse> getByHeader(String header) {
+        List<Article> articles = articleRepository.findArticleByHeader(header);
+        return articles.stream().map(this::mapToArticleResponse).toList();
+    }
+
+    public void add(Article article) {
         articleRepository.save(article);
     }
 
-    public void updateArticle(Article article) {
+    public void update(Article article) {
         articleRepository.save(article);
     }
 
-    public void deleteArticle(Article article) {
+    public void delete(Article article) {
         articleRepository.delete(article);
     }
 
-    @Transactional
-    public ArticleResponse mapToArticleResponse(Article article) {
+    private ArticleResponse mapToArticleResponse(Article article) {
         return ArticleResponse.builder()
                 .id(article.getId())
                 .header(article.getHeader())
