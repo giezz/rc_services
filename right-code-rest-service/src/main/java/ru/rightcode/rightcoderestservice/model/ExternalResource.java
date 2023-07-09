@@ -19,7 +19,7 @@ public class ExternalResource {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column
+    @Column(nullable = false)
     private String link;
 
     @Column(name = "readable_link")
@@ -28,8 +28,9 @@ public class ExternalResource {
     @Column
     private String description;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn (
+            nullable = false,
             name = "resource_type_id",
             referencedColumnName = "id"
     )

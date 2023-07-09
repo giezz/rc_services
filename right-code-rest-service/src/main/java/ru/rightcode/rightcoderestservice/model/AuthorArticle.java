@@ -12,6 +12,7 @@ import ru.rightcode.rightcoderestservice.model.id.AuthorArticleId;
 @AllArgsConstructor
 @Builder
 public class AuthorArticle {
+
     @EmbeddedId
     private AuthorArticleId id;
     @ManyToOne
@@ -21,6 +22,7 @@ public class AuthorArticle {
             referencedColumnName = "id"
     )
     private Author author;
+
     @ManyToOne
     @MapsId("authorId")
     @JoinColumn(
@@ -28,6 +30,7 @@ public class AuthorArticle {
             referencedColumnName = "id"
     )
     private Article article;
+
     @ManyToOne
     @JoinColumn(
             name = "author_type_id",

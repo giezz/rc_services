@@ -1,5 +1,6 @@
 package ru.rightcode.rightcoderestservice.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,36 +20,39 @@ public class Article {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column
+    @Column(nullable = false)
     private String header;
 
-    @Column
+    @Column(nullable = false)
     private String content;
 
     @Column(name = "publication_date")
     @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate publicationDate;
 
     @Column(name = "publication_end_date")
     @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate publicationEndDate;
 
-    @Column(name = "creation_date")
+    @Column(name = "creation_date", nullable = false)
     @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate creationDate;
 
-    @Column(name = "is_main_article")
+    @Column(name = "is_main_article", nullable = false)
     private Boolean isMainArticle;
 
-    @Column(name = "is_publicly_accessible")
+    @Column(name = "is_publicly_accessible", nullable = false)
     private Boolean isPubliclyAccessible;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "status_id")
+    @JoinColumn(name = "status_id", nullable = false)
     private Status status;
 
     @ManyToOne
