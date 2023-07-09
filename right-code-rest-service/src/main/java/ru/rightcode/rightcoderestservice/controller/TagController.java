@@ -24,10 +24,10 @@ public class TagController {
         return tagService.getAll();
     }
 
-    @GetMapping
-    public List<Tag> getefef() {
-        return null;
-    }
+//    @GetMapping
+//    public List<Tag> getefef() {
+//        return null;
+//    }
 
     @GetMapping("/{id}")
     public Tag getTagById(@PathVariable("id") Integer id) {
