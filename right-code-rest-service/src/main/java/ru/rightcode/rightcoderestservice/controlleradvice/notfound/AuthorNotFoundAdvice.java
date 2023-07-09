@@ -1,19 +1,28 @@
 package ru.rightcode.rightcoderestservice.controlleradvice.notfound;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import ru.rightcode.rightcoderestservice.controlleradvice.ApiResponse;
+import ru.rightcode.rightcoderestservice.controlleradvice.BusinessCode;
 import ru.rightcode.rightcoderestservice.exception.notfound.AuthorNotFoundException;
+
+import java.time.LocalDateTime;
 
 @ControllerAdvice
 public class AuthorNotFoundAdvice {
 
-    @ResponseBody
     @ExceptionHandler(AuthorNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    String authorNotFoundHandler(AuthorNotFoundException ex) {
-        return ex.getMessage();
+    ResponseEntity<Object> authorNotFoundHandler(AuthorNotFoundException e) {
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        ApiResponse apiResponse = new ApiResponse(
+                httpStatus,
+                BusinessCode.E040,
+                BusinessCode.E040.getMessage(),
+                LocalDateTime.now(),
+                e.getMessage()
+        );
+        return new ResponseEntity<>(apiResponse, httpStatus);
     }
 }
