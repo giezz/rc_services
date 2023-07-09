@@ -3,7 +3,7 @@ package ru.rightcode.rightcoderestservice.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
@@ -27,15 +27,15 @@ public class Article {
 
     @Column(name = "publication_date")
     @Temporal(TemporalType.DATE)
-    private Date publicationDate;
+    private LocalDate publicationDate;
 
     @Column(name = "publication_end_date")
     @Temporal(TemporalType.DATE)
-    private Date publicationEndDate;
+    private LocalDate publicationEndDate;
 
     @Column(name = "creation_date")
     @Temporal(TemporalType.DATE)
-    private Date creationDate;
+    private LocalDate creationDate;
 
     @Column(name = "is_main_article")
     private Boolean isMainArticle;
