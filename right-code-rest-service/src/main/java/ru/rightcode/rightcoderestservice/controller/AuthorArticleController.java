@@ -12,23 +12,20 @@ import java.util.List;
 @RequestMapping("/author-article")
 @RequiredArgsConstructor
 public class AuthorArticleController {
+
     private final AuthorArticleRepository repository;
 
-    // ------------------------- GetMapping AuthorArticle -----------------
-    // Get all
     @GetMapping("/all")
     public List<AuthorArticle> getAllAuthorArticles() {
         return repository.findAll();
     }
 
-    // Get one by author_id and article_id
     @GetMapping("/{author_id}/{article_id}")
     public AuthorArticle getAuthorArticleById(@PathVariable(name = "author_id") Integer author_id,
                                               @PathVariable(name = "article_id") Integer article_id) {
         return repository.findById(author_id).orElseThrow(() -> new AuthorArticleNotFoundException(author_id, article_id));
     }
 
-    // ------------------------- PostMapping AuthorArticle -----------------
     @PostMapping("/add")
     public AuthorArticle addAuthorArticle(AuthorArticle authorArticle) {
         return repository.save(authorArticle);
