@@ -3,10 +3,12 @@ package ru.rightcode.rightcoderestservice.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.rightcode.rightcoderestservice.dto.ArticleResponse;
+import ru.rightcode.rightcoderestservice.exception.sql.PublicationDateGreaterThenPublicationEndDateException;
 import ru.rightcode.rightcoderestservice.model.Article;
 import ru.rightcode.rightcoderestservice.exception.notfound.ArticleNotFoundException;
 import ru.rightcode.rightcoderestservice.repository.ArticleRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -51,6 +53,9 @@ public class ArticleService {
     }
 
     public void add(Article article) {
+        article.setCreationDate(LocalDate.now());
+        if (article.getPublicationDate().isAfter(article.getPublicationEndDate()))
+            throw new PublicationDateGreaterThenPublicationEndDateException("publicationEndDate must be greater then publicationDate");
         articleRepository.save(article);
     }
 
@@ -67,17 +72,17 @@ public class ArticleService {
                 .id(article.getId())
                 .header(article.getHeader())
                 .content(article.getContent())
-                // FIXME так и должно быть с датой?
                 .publicationDate(article.getPublicationDate())
                 .publicationEndDate(article.getPublicationEndDate())
+                .creationDate(article.getCreationDate())
+                .isMainArticle(article.getIsMainArticle())
+                .isPubliclyAccessible(article.getIsPubliclyAccessible())
                 .category(article.getCategory())
                 .status(article.getStatus())
                 .editor(article.getEditor())
                 .delete(article.getDelete())
                 .tags(article.getTags())
-//                .tags(article.getTags().stream().map(Tag::toString).toList())
                 .externalResources(article.getExternalResources())
-//                .externalResources(article.getExternalResources().stream().map(ExternalResource::toString).toList())
                 .build();
     }
 
