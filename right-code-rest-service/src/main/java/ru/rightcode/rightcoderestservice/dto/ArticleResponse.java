@@ -6,8 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.rightcode.rightcoderestservice.model.*;
 
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Data
@@ -18,9 +17,9 @@ public class ArticleResponse {
     private Integer id;
     private String header;
     private String content;
-    private Date publicationDate;
-    private Date publicationEndDate;
-    private Date creationDate;
+    private LocalDate publicationDate;
+    private LocalDate publicationEndDate;
+    private LocalDate creationDate;
     private Boolean isMainArticle;
     private Boolean isPubliclyAccessible;
     private Category category;
