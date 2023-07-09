@@ -3,7 +3,8 @@ package ru.rightcode.rightcoderestservice.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.rightcode.rightcoderestservice.dto.ArticleResponse;
-import ru.rightcode.rightcoderestservice.exception.sql.PublicationDateGreaterThenPublicationEndDateException;
+import ru.rightcode.rightcoderestservice.exception.data.PublicationDateGreaterThenPublicationEndDateException;
+import ru.rightcode.rightcoderestservice.exception.data.PublicationEndDateNotSpecifiedException;
 import ru.rightcode.rightcoderestservice.model.Article;
 import ru.rightcode.rightcoderestservice.exception.notfound.ArticleNotFoundException;
 import ru.rightcode.rightcoderestservice.repository.ArticleRepository;
@@ -54,8 +55,19 @@ public class ArticleService {
 
     public void add(Article article) {
         article.setCreationDate(LocalDate.now());
-        if (article.getPublicationDate().isAfter(article.getPublicationEndDate()))
-            throw new PublicationDateGreaterThenPublicationEndDateException("publicationEndDate must be greater then publicationDate");
+
+        final LocalDate publicationDate = article.getPublicationDate();
+        final LocalDate publicationEndDate = article.getPublicationEndDate();
+
+        if (publicationDate != null) {
+            if (publicationEndDate == null) {
+                throw new PublicationEndDateNotSpecifiedException("publicationEndDate must be specified if publicationDate is specified");
+            }
+            if (publicationDate.isAfter(publicationEndDate) || publicationDate.isEqual(publicationEndDate))
+                throw new PublicationDateGreaterThenPublicationEndDateException(
+                        "publicationEndDate " + publicationEndDate + " must be greater then publicationDate " + publicationDate
+                );
+        }
         articleRepository.save(article);
     }
 
