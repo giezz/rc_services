@@ -2,11 +2,11 @@ package ru.rightcode.rightcoderestservice.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.rightcode.rightcoderestservice.model.Category;
 import ru.rightcode.rightcoderestservice.service.CategoryService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/categories")
@@ -17,29 +17,31 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping()
-    public List<Category> getAllCategories() {
-        return categoryService.getAll();
+    public ResponseEntity<?> getAllCategories() {
+        return ResponseEntity.status(HttpStatus.OK).body(categoryService.getAll());
     }
 
     @GetMapping("/{id}")
-    public Category getCategoryById(@PathVariable(name = "id") Integer id) {
-        return categoryService.get(id);
+    public ResponseEntity<?> getCategoryById(@PathVariable(name = "id") Integer id) {
+        return ResponseEntity.status(HttpStatus.OK).body(categoryService.get(id));
     }
 
     @PostMapping()
-    public void addCategory(@RequestBody Category category) {
-        categoryService.add(category);
+    public ResponseEntity<?> addCategory(@RequestBody Category category) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.add(category));
     }
 
     @PutMapping("/{id}")
-    public void updateCategory(@PathVariable("id") Category categoryFromDb,
+    public ResponseEntity<?> updateCategory(@PathVariable("id") Integer id,
                                @RequestBody Category category) {
+        Category categoryFromDb = categoryService.get(id);
         categoryFromDb.setType(category.getType());
-        categoryService.update(categoryFromDb);
+        return ResponseEntity.status(HttpStatus.OK).body(categoryService.update(categoryFromDb));
     }
 
     @DeleteMapping("{id}")
-    public void deleteCategory(@PathVariable("id") Category category) {
+    public ResponseEntity<?> deleteCategory(@PathVariable("id") Category category) {
         categoryService.delete(category);
+        return ResponseEntity.status(HttpStatus.OK).body("deleted");
     }
 }

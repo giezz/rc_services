@@ -2,11 +2,10 @@ package ru.rightcode.rightcoderestservice.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.rightcode.rightcoderestservice.model.Tag;
 import ru.rightcode.rightcoderestservice.service.TagService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/tags")
@@ -17,43 +16,34 @@ public class TagController {
     private final TagService tagService;
 
     @GetMapping
-    public List<Tag> getAllTags(@RequestParam(name = "name", required = false) String name) {
+    public ResponseEntity<?> getAllTags(@RequestParam(name = "name", required = false) String name) {
         if (name != null) {
-            return tagService.getAllByName(name);
+            return ResponseEntity.status(HttpStatus.OK).body(tagService.getAllByName(name));
         }
-        return tagService.getAll();
+        return ResponseEntity.status(HttpStatus.OK).body(tagService.getAll());
     }
 
-//    @GetMapping
-//    public List<Tag> getefef() {
-//        return null;
-//    }
-
     @GetMapping("/{id}")
-    public Tag getTagById(@PathVariable("id") Integer id) {
-        return tagService.getById(id);
+    public ResponseEntity<?> getTagById(@PathVariable("id") Integer id) {
+        return ResponseEntity.status(HttpStatus.OK).body(tagService.getById(id));
     }
 
     @PostMapping()
-    @ResponseStatus(HttpStatus.CREATED)
-    public void addTag(@RequestBody Tag tag) {
-        tagService.add(tag);
+    public ResponseEntity<?> addTag(@RequestBody Tag tag) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(tagService.add(tag));
     }
 
-    //    @PutMapping
-//    public void updateTag(@RequestBody Tag tag) {
-//        if (tag.getId() != null)
-//            tagService.update(tag);
-//    }
     @PutMapping("/{id}")
-    public void updateTag(@PathVariable("id") Tag tagFromDb,
-                          @RequestBody Tag tag) {
+    public ResponseEntity<?> updateTag(@PathVariable("id") Integer id,
+                                       @RequestBody Tag tag) {
+        Tag tagFromDb = tagService.getById(id);
         tagFromDb.setName(tag.getName());
-        tagService.update(tagFromDb);
+        return ResponseEntity.status(HttpStatus.OK).body(tagService.update(tagFromDb));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteTag(@PathVariable("id") Tag tag) {
+    public ResponseEntity<?> deleteTag(@PathVariable("id") Tag tag) {
         tagService.delete(tag);
+        return ResponseEntity.status(HttpStatus.OK).body("deleted");
     }
 }

@@ -4,11 +4,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.rightcode.rightcoderestservice.model.ExternalResource;
 import ru.rightcode.rightcoderestservice.service.ExternalResourceService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/external-resources")
@@ -19,30 +18,31 @@ public class ExternalResourceController {
     private final ExternalResourceService externalResourceService;
 
     @GetMapping
-    public List<ExternalResource> getAllExternalResources() {
-        return externalResourceService.getAll();
+    public ResponseEntity<?> getAllExternalResources() {
+        return ResponseEntity.status(HttpStatus.OK).body(externalResourceService.getAll());
     }
 
     @GetMapping("/{id}")
-    public ExternalResource getExternalResourceById(@PathVariable(name = "id") Integer id) {
-        return externalResourceService.get(id);
+    public ResponseEntity<?> getExternalResourceById(@PathVariable(name = "id") Integer id) {
+        return ResponseEntity.status(HttpStatus.OK).body(externalResourceService.get(id));
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public void addExternalResource(@RequestBody ExternalResource externalResource) {
-        externalResourceService.add(externalResource);
+    public ResponseEntity<?> addExternalResource(@RequestBody ExternalResource externalResource) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(externalResourceService.add(externalResource));
     }
 
     @PutMapping("/{id}")
-    public void updateExternalResource(@PathVariable("id") ExternalResource externalResourceFromDb,
-                                       @RequestBody ExternalResource externalResource) {
+    public ResponseEntity<?> updateExternalResource(@PathVariable("id") Integer id,
+                                                    @RequestBody ExternalResource externalResource) {
+        ExternalResource externalResourceFromDb = externalResourceService.get(id);
         BeanUtils.copyProperties(externalResource, externalResourceFromDb, "id");
-        externalResourceService.update(externalResourceFromDb);
+        return ResponseEntity.status(HttpStatus.OK).body(externalResourceService.update(externalResourceFromDb));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteExternalResource(@PathVariable("id") ExternalResource externalResource) {
+    public ResponseEntity<?> deleteExternalResource(@PathVariable("id") ExternalResource externalResource) {
         externalResourceService.delete(externalResource);
+        return ResponseEntity.status(HttpStatus.OK).body("deleted");
     }
 }

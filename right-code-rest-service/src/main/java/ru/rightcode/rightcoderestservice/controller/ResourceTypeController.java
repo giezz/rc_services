@@ -2,11 +2,11 @@ package ru.rightcode.rightcoderestservice.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.rightcode.rightcoderestservice.model.ResourceType;
 import ru.rightcode.rightcoderestservice.service.ResourceTypeService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/resource-types")
@@ -17,29 +17,31 @@ public class ResourceTypeController {
     private final ResourceTypeService resourceTypeService;
 
     @GetMapping()
-    public List<ResourceType> getAllResourceTypes() {
-        return resourceTypeService.getAll();
+    public ResponseEntity<?> getAllResourceTypes() {
+        return ResponseEntity.status(HttpStatus.OK).body(resourceTypeService.getAll());
     }
 
     @GetMapping("/{id}")
-    public void getResourceTypeById(@PathVariable("id") Integer id) {
-        resourceTypeService.get(id);
+    public ResponseEntity<?> getResourceTypeById(@PathVariable("id") Integer id) {
+        return ResponseEntity.status(HttpStatus.OK).body(resourceTypeService.get(id));
     }
 
     @PostMapping
-    public void addResourceType(@RequestBody ResourceType resourceType) {
-        resourceTypeService.add(resourceType);
+    public ResponseEntity<?> addResourceType(@RequestBody ResourceType resourceType) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(resourceTypeService.add(resourceType));
     }
 
     @PutMapping("/{id}")
-    public void updateResourceType(@PathVariable("id") ResourceType resourceTypeFromDb,
-                                   @RequestBody ResourceType resourceType) {
+    public ResponseEntity<?> updateResourceType(@PathVariable("id") Integer id,
+                                                @RequestBody ResourceType resourceType) {
+        ResourceType resourceTypeFromDb = resourceTypeService.get(id);
         resourceTypeFromDb.setName(resourceType.getName());
-        resourceTypeService.update(resourceTypeFromDb);
+        return ResponseEntity.status(HttpStatus.OK).body(resourceTypeService.update(resourceTypeFromDb));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteResourceType(@PathVariable("id") ResourceType resourceType) {
+    public ResponseEntity<?> deleteResourceType(@PathVariable("id") ResourceType resourceType) {
         resourceTypeService.delete(resourceType);
+        return ResponseEntity.status(HttpStatus.OK).body("deleted");
     }
 }
