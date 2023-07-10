@@ -1,9 +1,13 @@
 package ru.rightcode.rightcoderestservice.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
@@ -12,44 +16,45 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@ToString
 public class Article {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column
+    @Column(nullable = false)
     private String header;
 
-    @Column
+    @Column(nullable = false)
     private String content;
 
     @Column(name = "publication_date")
     @Temporal(TemporalType.DATE)
-    private Date publicationDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate publicationDate;
 
     @Column(name = "publication_end_date")
     @Temporal(TemporalType.DATE)
-    private Date publicationEndDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate publicationEndDate;
 
-    @Column(name = "creation_date")
+    @Column(name = "creation_date", nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date creationDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate creationDate;
 
-    @Column(name = "is_main_article")
+    @Column(name = "is_main_article", nullable = false)
     private Boolean isMainArticle;
 
-    @Column(name = "is_publicly_accessible")
+    @Column(name = "is_publicly_accessible", nullable = false)
     private Boolean isPubliclyAccessible;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "status_id")
+    @JoinColumn(name = "status_id", nullable = false)
     private Status status;
 
     @ManyToOne
@@ -59,6 +64,14 @@ public class Article {
     @ManyToOne
     @JoinColumn(name = "delete_id")
     private Author delete;
+
+    @ManyToMany
+    @JoinTable(
+            name = "author_article",
+            joinColumns = @JoinColumn(name = "article_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id")
+    )
+    private Set<Author> authors;
 
     @ManyToMany
     @JoinTable(

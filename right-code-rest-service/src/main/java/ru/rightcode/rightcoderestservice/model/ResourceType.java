@@ -19,7 +19,7 @@ public class ResourceType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column
+    @Column(nullable = false)
     private String name;
 
     @JsonIgnore
