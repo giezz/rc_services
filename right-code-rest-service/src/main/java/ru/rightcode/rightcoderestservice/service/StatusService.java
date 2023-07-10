@@ -2,6 +2,7 @@ package ru.rightcode.rightcoderestservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.rightcode.rightcoderestservice.exception.notfound.ResourceNotFoundException;
 import ru.rightcode.rightcoderestservice.model.Status;
 import ru.rightcode.rightcoderestservice.repository.StatusRepository;
 
@@ -18,7 +19,7 @@ public class StatusService {
     }
 
     public Status getById(Integer id) {
-        return statusRepository.findById(id).orElseThrow();
+        return statusRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.valueOf(id)));
     }
 
     public void add(Status status) {

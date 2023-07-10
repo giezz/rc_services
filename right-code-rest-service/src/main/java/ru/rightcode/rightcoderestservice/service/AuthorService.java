@@ -2,8 +2,8 @@ package ru.rightcode.rightcoderestservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.rightcode.rightcoderestservice.exception.notfound.ResourceNotFoundException;
 import ru.rightcode.rightcoderestservice.model.Author;
-import ru.rightcode.rightcoderestservice.exception.notfound.AuthorNotFoundException;
 import ru.rightcode.rightcoderestservice.repository.AuthorRepository;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public class AuthorService {
     }
 
     public Author getById(Integer id) {
-        return authorRepository.findById(id).orElseThrow(() -> new AuthorNotFoundException(id));
+        return authorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.valueOf(id)));
     }
 
     public void add(Author author) {

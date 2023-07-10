@@ -2,8 +2,8 @@ package ru.rightcode.rightcoderestservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.rightcode.rightcoderestservice.exception.notfound.ResourceNotFoundException;
 import ru.rightcode.rightcoderestservice.model.Category;
-import ru.rightcode.rightcoderestservice.exception.notfound.CategoryNotFoundException;
 import ru.rightcode.rightcoderestservice.repository.CategoryRepository;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public class CategoryService {
     }
 
     public Category get(Integer id) {
-        return categoryRepository.findById(id).orElseThrow(() -> new CategoryNotFoundException(id));
+        return categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.valueOf(id)));
     }
 
     public void add(Category category) {

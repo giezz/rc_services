@@ -1,15 +1,19 @@
 package ru.rightcode.rightcoderestservice.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import ru.rightcode.rightcoderestservice.dto.ArticleResponse;
+import ru.rightcode.rightcoderestservice.dto.ArticleRequest;
 import ru.rightcode.rightcoderestservice.exception.data.PublicationDateGreaterThenPublicationEndDateException;
 import ru.rightcode.rightcoderestservice.exception.data.PublicationEndDateNotSpecifiedException;
+import ru.rightcode.rightcoderestservice.exception.notfound.ArticlesByAuthorNotFoundException;
+import ru.rightcode.rightcoderestservice.exception.notfound.ResourceNotFoundException;
 import ru.rightcode.rightcoderestservice.model.Article;
-import ru.rightcode.rightcoderestservice.exception.notfound.ArticleNotFoundException;
 import ru.rightcode.rightcoderestservice.repository.ArticleRepository;
+import ru.rightcode.rightcoderestservice.repository.specification.ArticleSpecification;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,56 +22,72 @@ public class ArticleService {
 
     private final ArticleRepository articleRepository;
 
-    public ArticleResponse getById(Integer id) {
-        return mapToArticleResponse(articleRepository.findById(id).orElseThrow(() -> new ArticleNotFoundException(id)));
+    public Article getById(Integer id) {
+        return articleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.valueOf(id)));
     }
 
-    public List<ArticleResponse> getAll() {
-        List<Article> articles = articleRepository.findAll();
-        return articles.stream().map(this::mapToArticleResponse).toList();
-//        return articleRepository.findAll();
+    public List<Article> getAll() {
+        return articleRepository.findAll();
     }
 
-    public List<ArticleResponse> getSortedByStatus() {
-        List<Article> articles = articleRepository.findAllOrderByStatus();
-        return articles.stream().map(this::mapToArticleResponse).toList();
+    public List<Article> getByRequest(ArticleRequest articleRequest) {
+
+        List<Specification<Article>> specificationList = new ArrayList<>();
+
+        final String header = articleRequest.getHeader();
+        final LocalDate publicationDate = articleRequest.getPublicationDate();
+        final LocalDate publicationEndDate = articleRequest.getPublicationEndDate();
+        final String status = articleRequest.getStatus();
+
+        checkValidDate(publicationDate, publicationEndDate);
+
+        if (header != null)
+            specificationList.add(Specification.where(ArticleSpecification.hasHeader(header)));
+
+        if (publicationDate != null)
+            specificationList.add(Specification.where(ArticleSpecification.hasPublicationDate(publicationDate)));
+
+        if (publicationEndDate != null)
+            specificationList.add(Specification.where(ArticleSpecification.hasPublicationEndDate(publicationEndDate)));
+
+        if (status != null)
+            specificationList.add(Specification.where(ArticleSpecification.hasStatus(status)));
+
+        if (articleRequest.getTags() != null)
+            specificationList.add(Specification.where(ArticleSpecification.hasTags(articleRequest.getTags())));
+
+        Specification<Article> articleSpecification = Specification.allOf(specificationList);
+        List<Article> articles = articleRepository.findAll(articleSpecification);
+
+        if (articles.isEmpty())
+            throw new ResourceNotFoundException("resource not found");
+
+        return articles;
     }
 
-    public List<ArticleResponse> getByPublicationDate() {
-        List<Article> articles = articleRepository.findAllOrderByPublicationDate();
-        return articles.stream().map(this::mapToArticleResponse).toList();
+    public List<Article> getMainArticles() {
+        List<Article> articles = articleRepository.findMainArticles();
+
+        if (articles.isEmpty())
+            throw new ResourceNotFoundException("resource not found");
+
+        return articles;
     }
 
-    public List<ArticleResponse> getSortedIsMainArticle() {
-        List<Article> articles = articleRepository.findAllOrderByIsMainArticle();
-        return articles.stream().map(this::mapToArticleResponse).toList();
-    }
+    public List<Article> getByAuthors(List<Integer> ids) {
+        List<Article> articles = articleRepository.findArticlesByAuthors(ids);
 
-    public List<ArticleResponse> getByTags(List<String> tags) {
-        List<Article> articles = articleRepository.findArticlesByTag(tags);
-        return articles.stream().map(this::mapToArticleResponse).toList();
-    }
+        if (articles.isEmpty())
+            throw new ArticlesByAuthorNotFoundException(ids.toString());
 
-    public List<ArticleResponse> getByHeader(String header) {
-        List<Article> articles = articleRepository.findArticleByHeader(header);
-        return articles.stream().map(this::mapToArticleResponse).toList();
+        return articles;
     }
 
     public void add(Article article) {
         article.setCreationDate(LocalDate.now());
 
-        final LocalDate publicationDate = article.getPublicationDate();
-        final LocalDate publicationEndDate = article.getPublicationEndDate();
+        checkValidDate(article.getPublicationDate(), article.getPublicationEndDate());
 
-        if (publicationDate != null) {
-            if (publicationEndDate == null) {
-                throw new PublicationEndDateNotSpecifiedException("publicationEndDate must be specified if publicationDate is specified");
-            }
-            if (publicationDate.isAfter(publicationEndDate) || publicationDate.isEqual(publicationEndDate))
-                throw new PublicationDateGreaterThenPublicationEndDateException(
-                        "publicationEndDate " + publicationEndDate + " must be greater then publicationDate " + publicationDate
-                );
-        }
         articleRepository.save(article);
     }
 
@@ -79,23 +99,21 @@ public class ArticleService {
         articleRepository.delete(article);
     }
 
-    private ArticleResponse mapToArticleResponse(Article article) {
-        return ArticleResponse.builder()
-                .id(article.getId())
-                .header(article.getHeader())
-                .content(article.getContent())
-                .publicationDate(article.getPublicationDate())
-                .publicationEndDate(article.getPublicationEndDate())
-                .creationDate(article.getCreationDate())
-                .isMainArticle(article.getIsMainArticle())
-                .isPubliclyAccessible(article.getIsPubliclyAccessible())
-                .category(article.getCategory())
-                .status(article.getStatus())
-                .editor(article.getEditor())
-                .delete(article.getDelete())
-                .tags(article.getTags())
-                .externalResources(article.getExternalResources())
-                .build();
+    private static void checkValidDate(LocalDate publicationDate, LocalDate publicationEndDate) {
+        if (publicationDate != null) {
+            if (publicationEndDate == null) {
+                throw new PublicationEndDateNotSpecifiedException("publicationEndDate must be specified if publicationDate is specified");
+            }
+            if (publicationDate.isAfter(publicationEndDate) || publicationDate.isEqual(publicationEndDate))
+                throw new PublicationDateGreaterThenPublicationEndDateException(
+                        "publicationEndDate " + publicationEndDate + " must be greater then publicationDate " + publicationDate
+                );
+        }
     }
 
+    private List<Specification<Article>> checkRequestParams(ArticleRequest articleRequest) {
+        List<Specification<Article>> specificationList = new ArrayList<>();
+
+        return null;
+    }
 }
