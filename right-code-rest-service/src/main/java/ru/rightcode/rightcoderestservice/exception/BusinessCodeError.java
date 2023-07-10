@@ -1,4 +1,4 @@
-package ru.rightcode.rightcoderestservice.controlleradvice;
+package ru.rightcode.rightcoderestservice.exception;
 
 public enum BusinessCodeError {
     E001("Не заполнены обязательные поля"),
