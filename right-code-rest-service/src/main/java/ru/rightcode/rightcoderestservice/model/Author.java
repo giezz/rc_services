@@ -1,7 +1,10 @@
 package ru.rightcode.rightcoderestservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.Set;
 
 @Entity
 @Table(name = "author")
@@ -26,4 +29,12 @@ public class Author {
 
     @Column
     private String info;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "authors")
+    private Set<Article> articles;
+
+    @ManyToOne
+    @JoinColumn(name = "author_type_id")
+    private AuthorType authorType;
 }

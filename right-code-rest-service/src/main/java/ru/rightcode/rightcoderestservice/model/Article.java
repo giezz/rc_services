@@ -2,7 +2,10 @@ package ru.rightcode.rightcoderestservice.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -13,7 +16,6 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Article {
 
     @Id
@@ -62,6 +64,14 @@ public class Article {
     @ManyToOne
     @JoinColumn(name = "delete_id")
     private Author delete;
+
+    @ManyToMany
+    @JoinTable(
+            name = "author_article",
+            joinColumns = @JoinColumn(name = "article_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id")
+    )
+    private Set<Author> authors;
 
     @ManyToMany
     @JoinTable(
