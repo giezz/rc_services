@@ -31,10 +31,6 @@ public class AuthorTypeController {
         authorTypeService.add(authorType);
     }
 
-    //    @PutMapping
-//    public void updateAuthorType(@RequestBody AuthorType authorType) {
-//        authorTypeService.update(authorType);
-//    }
     @PutMapping("/{id}")
     public void updateAuthorType(@PathVariable("id") AuthorType authorTypeFromDb,
                                  @RequestBody AuthorType authorType) {
