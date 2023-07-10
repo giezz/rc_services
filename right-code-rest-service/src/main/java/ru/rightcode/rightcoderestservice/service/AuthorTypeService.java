@@ -22,12 +22,12 @@ public class AuthorTypeService {
         return authorTypeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.valueOf(id)));
     }
 
-    public void add(AuthorType authorType) {
-        authorTypeRepository.save(authorType);
+    public AuthorType add(AuthorType authorType) {
+        return authorTypeRepository.save(authorType);
     }
 
-    public void update(AuthorType authorType) {
-        authorTypeRepository.save(authorType);
+    public AuthorType update(AuthorType authorType) {
+        return authorTypeRepository.save(authorType);
     }
 
     public void delete(AuthorType authorType) {

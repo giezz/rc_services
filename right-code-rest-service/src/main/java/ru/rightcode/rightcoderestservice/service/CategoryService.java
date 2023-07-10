@@ -22,12 +22,12 @@ public class CategoryService {
         return categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.valueOf(id)));
     }
 
-    public void add(Category category) {
-        categoryRepository.save(category);
+    public Category add(Category category) {
+        return categoryRepository.save(category);
     }
 
-    public void update(Category category) {
-        categoryRepository.save(category);
+    public Category update(Category category) {
+        return categoryRepository.save(category);
     }
 
     public void delete(Category category) {

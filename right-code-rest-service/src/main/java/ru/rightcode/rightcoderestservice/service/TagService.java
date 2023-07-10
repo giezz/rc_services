@@ -30,11 +30,11 @@ public class TagService {
         return tagRepository.save(tag);
     }
 
-    public void delete(Tag tag) {
-        tagRepository.delete(tag);
+    public Tag update(Tag tag) {
+        return tagRepository.save(tag);
     }
 
-    public void update(Tag tag) {
-        tagRepository.save(tag);
+    public void delete(Tag tag) {
+        tagRepository.delete(tag);
     }
 }

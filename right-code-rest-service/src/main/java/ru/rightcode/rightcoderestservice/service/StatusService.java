@@ -22,12 +22,12 @@ public class StatusService {
         return statusRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.valueOf(id)));
     }
 
-    public void add(Status status) {
-        statusRepository.save(status);
+    public Status add(Status status) {
+        return statusRepository.save(status);
     }
 
-    public void update(Status status) {
-        statusRepository.save(status);
+    public Status update(Status status) {
+        return statusRepository.save(status);
     }
 
     public void delete(Status status) {

@@ -22,12 +22,12 @@ public class ResourceTypeService {
         return resourceTypeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.valueOf(id)));
     }
 
-    public void add(ResourceType resourceType) {
-        resourceTypeRepository.save(resourceType);
+    public ResourceType add(ResourceType resourceType) {
+        return resourceTypeRepository.save(resourceType);
     }
 
-    public void update(ResourceType resourceType) {
-        resourceTypeRepository.save(resourceType);
+    public ResourceType update(ResourceType resourceType) {
+        return resourceTypeRepository.save(resourceType);
     }
 
     public void delete(ResourceType resourceType) {

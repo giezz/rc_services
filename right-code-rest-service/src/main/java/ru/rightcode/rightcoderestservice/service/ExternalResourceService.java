@@ -22,12 +22,12 @@ public class ExternalResourceService {
         return externalResourceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.valueOf(id)));
     }
 
-    public void add(ExternalResource externalResource) {
-        externalResourceRepository.save(externalResource);
+    public ExternalResource add(ExternalResource externalResource) {
+        return externalResourceRepository.save(externalResource);
     }
 
-    public void update(ExternalResource externalResource) {
-        externalResourceRepository.save(externalResource);
+    public ExternalResource update(ExternalResource externalResource) {
+        return externalResourceRepository.save(externalResource);
     }
 
     public void delete(ExternalResource externalResource) {

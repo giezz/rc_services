@@ -13,8 +13,10 @@ import ru.rightcode.rightcoderestservice.repository.ArticleRepository;
 import ru.rightcode.rightcoderestservice.repository.specification.ArticleSpecification;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +34,7 @@ public class ArticleService {
 
     public List<Article> getByRequest(ArticleRequest articleRequest) {
 
-        List<Specification<Article>> specificationList = new ArrayList<>();
+        List<Specification<Article>> specificationList;
 
         final String header = articleRequest.getHeader();
         final LocalDate publicationDate = articleRequest.getPublicationDate();
@@ -41,20 +43,16 @@ public class ArticleService {
 
         checkValidDate(publicationDate, publicationEndDate);
 
-        if (header != null)
-            specificationList.add(Specification.where(ArticleSpecification.hasHeader(header)));
-
-        if (publicationDate != null)
-            specificationList.add(Specification.where(ArticleSpecification.hasPublicationDate(publicationDate)));
-
-        if (publicationEndDate != null)
-            specificationList.add(Specification.where(ArticleSpecification.hasPublicationEndDate(publicationEndDate)));
-
-        if (status != null)
-            specificationList.add(Specification.where(ArticleSpecification.hasStatus(status)));
-
-        if (articleRequest.getTags() != null)
-            specificationList.add(Specification.where(ArticleSpecification.hasTags(articleRequest.getTags())));
+        specificationList = Stream.of(
+                        Optional.ofNullable(header).map(ArticleSpecification::hasHeader),
+                        Optional.ofNullable(publicationDate).map(ArticleSpecification::hasPublicationDate),
+                        Optional.ofNullable(publicationEndDate).map(ArticleSpecification::hasPublicationEndDate),
+                        Optional.ofNullable(status).map(ArticleSpecification::hasStatus),
+                        Optional.ofNullable(articleRequest.getTags()).map(ArticleSpecification::hasTags)
+                )
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
 
         Specification<Article> articleSpecification = Specification.allOf(specificationList);
         List<Article> articles = articleRepository.findAll(articleSpecification);
@@ -83,16 +81,16 @@ public class ArticleService {
         return articles;
     }
 
-    public void add(Article article) {
+    public Article add(Article article) {
         article.setCreationDate(LocalDate.now());
 
         checkValidDate(article.getPublicationDate(), article.getPublicationEndDate());
 
-        articleRepository.save(article);
+        return articleRepository.save(article);
     }
 
-    public void update(Article article) {
-        articleRepository.save(article);
+    public Article update(Article article) {
+        return articleRepository.save(article);
     }
 
     public void delete(Article article) {
@@ -109,11 +107,5 @@ public class ArticleService {
                         "publicationEndDate " + publicationEndDate + " must be greater then publicationDate " + publicationDate
                 );
         }
-    }
-
-    private List<Specification<Article>> checkRequestParams(ArticleRequest articleRequest) {
-        List<Specification<Article>> specificationList = new ArrayList<>();
-
-        return null;
     }
 }
