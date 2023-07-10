@@ -1,8 +1,9 @@
-package ru.rightcode.rightcoderestservice.controlleradvice;
+package ru.rightcode.rightcoderestservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
+import ru.rightcode.rightcoderestservice.exception.BusinessCodeError;
 
 import java.time.LocalDateTime;
 
