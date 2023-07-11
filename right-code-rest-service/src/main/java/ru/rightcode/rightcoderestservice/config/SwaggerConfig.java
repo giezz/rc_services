@@ -24,12 +24,12 @@ import io.swagger.v3.oas.annotations.servers.Server;
         ),
         servers = {
                 @Server(
-                        description = "Localhost",
-                        url = "http://localhost:8080"
+                        description = "Server",
+                        url = "http://94.228.113.73:8080"
                 ),
                 @Server(
-                        description = "Heroku",
-                        url = "https://rightcoderestservice.herokuapp.com"
+                        description = "Localhost",
+                        url = "http://localhost:8080"
                 )
         }
 )
