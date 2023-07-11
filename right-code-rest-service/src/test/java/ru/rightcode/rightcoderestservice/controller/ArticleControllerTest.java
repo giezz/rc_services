@@ -127,28 +127,5 @@ class ArticleControllerTest {
                 .andDo(print());
     }
 
-    @Test
-    public void ArticleController_GetAll() throws Exception{
-//        given(articleService.getAll()).willAnswer(invocationOnMock -> invocationOnMock.getArgument(0));
-
-        ArticleRequest articleRequest = ArticleRequest.builder()
-                .header("Test header")
-                .status("Опубликована")
-                .publicationDate(LocalDate.now().plusDays(1))
-                .publicationEndDate(LocalDate.now().plusDays(2))
-                .build();
-//        when(articleService.getById(1)).thenReturn(articleRequest);
-        ResultActions resultActions = mockMvc.perform(get("/articles")
-                .contentType(MediaType.APPLICATION_JSON)
-                .param("page", "0")
-                .param("size", "2")
-                .param("sort", "id")
-        );
-
-        resultActions
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.tags.size()", CoreMatchers.is(articleRequest.getTags().size())))
-                .andDo(print());
-    }
-
 
 }
