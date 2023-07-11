@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import ru.rightcode.rightcoderestservice.model.Article;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 
@@ -35,4 +36,9 @@ public interface ArticleRepository extends JpaRepository<Article, Integer>, JpaS
     @EntityGraph(attributePaths = {"status", "category", "delete", "editor", "authors", "tags", "externalResources", "externalResources.resourceType"})
     @Query("select a from Article a join a.authors au where au.id in (:ids)")
     List<Article> findArticlesByAuthors(@Param("ids") List<Integer> ids);
+
+    @Override
+    @NotNull
+    @EntityGraph(attributePaths = {"status", "category", "delete", "editor", "authors", "tags", "externalResources", "externalResources.resourceType"})
+    Optional<Article> findById(@NotNull Integer integer);
 }
