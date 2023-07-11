@@ -11,9 +11,9 @@ import java.util.Set;
 @Table(name = "article")
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Article {
 
     @Id
