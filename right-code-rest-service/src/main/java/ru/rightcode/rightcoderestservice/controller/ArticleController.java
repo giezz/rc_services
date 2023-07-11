@@ -3,6 +3,9 @@ package ru.rightcode.rightcoderestservice.controller;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +29,8 @@ public class ArticleController {
                                             @RequestParam(name = "pubDate", required = false) LocalDate publicationDate,
                                             @RequestParam(name = "pubEndDate", required = false) LocalDate publicationEndDate,
                                             @RequestParam(name = "status", required = false) String status,
-                                            @RequestParam(name = "tags", required = false) List<String> tags
+                                            @RequestParam(name = "tags", required = false) List<String> tags,
+                                            @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable
     ) {
 
         return ResponseEntity.status(HttpStatus.OK).body(
@@ -36,7 +40,7 @@ public class ArticleController {
                         .publicationEndDate(publicationEndDate)
                         .status(status)
                         .tags(tags)
-                        .build())
+                        .build(), pageable)
         );
     }
 
@@ -62,7 +66,7 @@ public class ArticleController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateArticle(@PathVariable("id") Integer id,
-                              @RequestBody Article articleRequest) {
+                                           @RequestBody Article articleRequest) {
 
         Article articleFromDb = articleService.getById(id);
 

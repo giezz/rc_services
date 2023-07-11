@@ -1,6 +1,8 @@
 package ru.rightcode.rightcoderestservice.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import ru.rightcode.rightcoderestservice.dto.ArticleRequest;
@@ -32,7 +34,7 @@ public class ArticleService {
         return articleRepository.findAll();
     }
 
-    public List<Article> getByRequest(ArticleRequest articleRequest) {
+    public Page<Article> getByRequest(ArticleRequest articleRequest, Pageable pageable) {
 
         List<Specification<Article>> specificationList;
 
@@ -55,7 +57,7 @@ public class ArticleService {
                 .collect(Collectors.toList());
 
         Specification<Article> articleSpecification = Specification.allOf(specificationList);
-        List<Article> articles = articleRepository.findAll(articleSpecification);
+        Page<Article> articles = articleRepository.findAll(articleSpecification, pageable);
 
         if (articles.isEmpty())
             throw new ResourceNotFoundException("resource not found");

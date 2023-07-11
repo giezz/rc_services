@@ -1,5 +1,8 @@
 package ru.rightcode.rightcoderestservice.repository;
 
+import jakarta.validation.constraints.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,15 +18,15 @@ import java.util.List;
 
 public interface ArticleRepository extends JpaRepository<Article, Integer>, JpaSpecificationExecutor<Article> {
 
-    @SuppressWarnings("all")
     @Override
+    @NotNull
     @EntityGraph(attributePaths = {"status", "category", "delete", "editor", "authors", "tags", "externalResources", "externalResources.resourceType"})
     List<Article> findAll();
 
-    @SuppressWarnings("all")
     @Override
+    @NotNull
     @EntityGraph(attributePaths = {"status", "category", "delete", "editor", "authors", "tags", "externalResources", "externalResources.resourceType"})
-    List<Article> findAll(Specification<Article> articleSpecification);
+    Page<Article> findAll(@NotNull Specification<Article> articleSpecification, @NotNull Pageable pageable);
 
     @EntityGraph(attributePaths = {"status", "category", "delete", "editor", "authors", "tags", "externalResources", "externalResources.resourceType"})
     @Query("select a from Article a where a.isMainArticle = true")
