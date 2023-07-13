@@ -102,11 +102,17 @@ public class ArticleService {
     private static void checkValidDate(LocalDate publicationDate, LocalDate publicationEndDate) {
         if (publicationDate != null) {
             if (publicationEndDate == null) {
-                throw new PublicationEndDateNotSpecifiedException("publicationEndDate must be specified if publicationDate is specified");
+                throw new PublicationEndDateNotSpecifiedException(
+                        "publicationEndDate must be specified if publicationDate is specified"
+                );
             }
             if (publicationDate.isAfter(publicationEndDate) || publicationDate.isEqual(publicationEndDate))
                 throw new PublicationDateGreaterThenPublicationEndDateException(
-                        "publicationEndDate " + publicationEndDate + " must be greater then publicationDate " + publicationDate
+                        String.format(
+                                "publicationEndDate %tF must be greater then publicationDate %tF",
+                                publicationEndDate,
+                                publicationDate
+                        )
                 );
         }
     }
