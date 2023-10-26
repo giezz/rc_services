@@ -1,6 +1,7 @@
 package ru.rightcode.rightcoderestservice.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -14,12 +15,14 @@ import ru.rightcode.rightcoderestservice.service.TagService;
 @RequestMapping("/tags")
 @io.swagger.v3.oas.annotations.tags.Tag(name = "Tag Controller", description = "Контроллер тэгов")
 @RequiredArgsConstructor
+@Slf4j
 public class TagController {
 
     private final TagService tagService;
 
     @GetMapping
     public ResponseEntity<?> getAllTags(@RequestParam(name = "name", required = false) String name) {
+        log.info("INSTANCE_ID" + System.getenv("INSTANCE_ID"));
         if (name != null) {
             return ResponseEntity.status(HttpStatus.OK).body(tagService.getAllByName(name));
         }
@@ -38,6 +41,7 @@ public class TagController {
 
     @PostMapping()
     public ResponseEntity<?> addTag(@RequestBody Tag tag) {
+        log.info("INSTANCE_ID" + System.getenv("INSTANCE_ID"));
         return ResponseEntity.status(HttpStatus.CREATED).body(tagService.add(tag));
     }
 
