@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  java_web:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: 8080
+      CONNECTION_STRING: "jdbc:postgresql://host.docker.internal:5432/right_code?currentSchema=dev"
+      INSTANCE_ID: 1
+      LOGS_PATH: "/app"
+    volumes:
+      - logs:/app
+  java_web_1:
+    build: .
+    ports:
+      - "8081:8081"
+    environment:
+      PORT: 8081
+      CONNECTION_STRING: "jdbc:postgresql://host.docker.internal:5432/right_code?currentSchema=dev"
+      INSTANCE_ID: 2
+      LOGS_PATH: "/app"
+    volumes:
+      - logs:/app
+volumes:
+  logs:
